@@ -17,7 +17,7 @@ class AppWidget extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const RangeSelectorPage(
+      home: RangeSelectorPage(
         title: 'Random no. generator',
       ),
     );

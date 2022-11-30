@@ -1,31 +1,26 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:river_pod_demo/randomizer_page.dart';
 import 'package:river_pod_demo/range_selector_form.dart';
 
-class RangeSelectorPage extends StatefulWidget {
-  const RangeSelectorPage({super.key, required this.title});
+class RangeSelectorPage extends HookWidget {
+  RangeSelectorPage({super.key, required this.title});
 
+  final _formKey = GlobalKey<FormState>();
   final String title;
 
   @override
-  State<RangeSelectorPage> createState() => _RangeSelectorPageState();
-}
-
-class _RangeSelectorPageState extends State<RangeSelectorPage> {
-  @override
   Widget build(BuildContext context) {
-    int _minimum = 0;
-    int _maximum = 0;
-    final _formKey = GlobalKey<FormState>();
-
+    final minimum = useState<int>(0);
+    final maximum = useState<int>(0);
     return Scaffold(
       appBar: AppBar(
         title: const Text("Random Number Generator"),
       ),
       body: FormWidget(
         formKey: _formKey,
-        maxValueSetter: ((value) => _maximum = value),
-        minValueSetter: ((value) => _minimum = value),
+        maxValueSetter: ((value) => maximum.value = value),
+        minValueSetter: ((value) => minimum.value = value),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
@@ -45,8 +40,8 @@ class _RangeSelectorPageState extends State<RangeSelectorPage> {
             Navigator.of(context).push(
               MaterialPageRoute(
                 builder: (context) => RandomizerPage(
-                  minimum: _minimum,
-                  maximum: _maximum,
+                  minimum: minimum.value,
+                  maximum: maximum.value,
                 ),
               ),
             );
