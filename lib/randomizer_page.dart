@@ -1,38 +1,35 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:provider/provider.dart';
+import 'package:river_pod_demo/randomizer_change_notifier.dart';
 
-class RandomizerPage extends HookWidget {
-  final int minimum;
-  final int maximum;
-  final rng = Random();
-
-  RandomizerPage({
+class RandomizerPage extends StatelessWidget {
+  const RandomizerPage({
     super.key,
-    required this.minimum,
-    required this.maximum,
   });
 
   @override
   Widget build(BuildContext context) {
-    final randomNumber = useState<int?>(null);
+    // final randomNumber = useState<int?>(null);
+
     return Scaffold(
       appBar: AppBar(
         title: const Text("Randomizer page"),
       ),
       body: Center(
-        child: Text(
-          randomNumber.value?.toString() ?? "Generation awaiting",
-          style: const TextStyle(fontSize: 40),
+        child: Consumer<RandomizerChangeNotifier>(
+          builder: (context, notifier, child) {
+            return Text(
+              notifier.generatedNumber?.toString() ?? "Generation awaiting",
+              style: const TextStyle(fontSize: 40),
+            );
+          },
         ),
       ),
       floatingActionButton: FloatingActionButton.extended(
-        label: const Text("Generate"),
-        onPressed: () {
-          randomNumber.value = minimum + rng.nextInt(maximum + 1 - minimum);
-        },
-      ),
+          label: const Text("Generate"),
+          onPressed: () {
+            context.read<RandomizerChangeNotifier>().generateRandomNumber();
+          }),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }

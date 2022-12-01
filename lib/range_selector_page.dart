@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:provider/provider.dart';
+import 'package:river_pod_demo/randomizer_change_notifier.dart';
 import 'package:river_pod_demo/randomizer_page.dart';
 import 'package:river_pod_demo/range_selector_form.dart';
 
-class RangeSelectorPage extends HookWidget {
+class RangeSelectorPage extends StatelessWidget {
   RangeSelectorPage({super.key, required this.title});
 
   final _formKey = GlobalKey<FormState>();
@@ -11,16 +12,16 @@ class RangeSelectorPage extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    final minimum = useState<int>(0);
-    final maximum = useState<int>(0);
     return Scaffold(
       appBar: AppBar(
         title: const Text("Random Number Generator"),
       ),
       body: FormWidget(
         formKey: _formKey,
-        maxValueSetter: ((value) => maximum.value = value),
-        minValueSetter: ((value) => minimum.value = value),
+        maxValueSetter: ((value) =>
+            context.read<RandomizerChangeNotifier>().max = value),
+        minValueSetter: ((value) =>
+            context.read<RandomizerChangeNotifier>().max = value),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
@@ -39,10 +40,7 @@ class RangeSelectorPage extends HookWidget {
             // navigate to generator page
             Navigator.of(context).push(
               MaterialPageRoute(
-                builder: (context) => RandomizerPage(
-                  minimum: minimum.value,
-                  maximum: maximum.value,
-                ),
+                builder: (context) => RandomizerPage(),
               ),
             );
           }
